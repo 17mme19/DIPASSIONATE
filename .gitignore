@@ -3,6 +3,10 @@
 # .json extensions
 *.json
 
+# IC Package Configurator records and schemas are source data.
+!package_configurator/data/**/*.json
+!package_configurator/tests/fixtures/**/*.json
+
 
 
 

@@ -1,0 +1,345 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "IC Package Record",
+  "description": "Structured package-record schema with categorized properties and JEDEC BGA terminology.",
+  "type": "object",
+  "properties": {
+    "manufacturer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "package_code": {
+      "type": "string",
+      "minLength": 1
+    },
+    "package_family": {
+      "type": "string",
+      "enum": ["QFN", "QFP", "BGA"]
+    },
+    "package_sub_family": {
+      "type": ["string", "null"]
+    },
+    "drawing_number": {
+      "type": ["string", "null"]
+    },
+    "document_year": {
+      "type": ["integer", "null"]
+    },
+    "package_description": {
+      "type": ["string", "null"]
+    },
+    "package_variant": {
+      "type": ["string", "null"]
+    },
+    "mounting_technology": {
+      "type": "string",
+      "minLength": 1
+    },
+    "connection_technology": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "properties": {
+      "type": "object",
+      "properties": {
+        "identification": {
+          "$ref": "#/$defs/propertyList"
+        },
+        "manufacturing": {
+          "$ref": "#/$defs/propertyList"
+        },
+        "interconnection": {
+          "$ref": "#/$defs/propertyList"
+        },
+        "geometry": {
+          "$ref": "#/$defs/propertyList"
+        },
+        "thermal_interconnection": {
+          "$ref": "#/$defs/propertyList"
+        },
+        "land_pattern_geometry": {
+          "$ref": "#/$defs/propertyList"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "manufacturer",
+    "package_family",
+    "package_description",
+    "package_sub_family",
+    "mounting_technology",
+    "connection_technology",
+    "source",
+    "properties"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "source": {
+      "type": "object",
+      "properties": {
+        "main_source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_type": {
+          "type": "string",
+          "enum": [
+            "manufacturer",
+            "manufacturer_drawing",
+            "manufacturer_workbook",
+            "reference_standard"
+          ]
+        },
+        "drawing_2d_url": {
+          "type": ["string", "null"],
+          "format": "uri"
+        },
+        "drawing_2d_file_type": {
+          "type": ["string", "null"],
+          "enum": ["PDF", "DWG", "DXF", "IMAGE", null]
+        },
+        "drawing_number": {
+          "type": ["string", "null"]
+        },
+        "document_year": {
+          "type": ["integer", "null"],
+          "minimum": 1900
+        },
+        "reference_sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/referenceSource"
+          }
+        },
+        "standards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/standardReference"
+          }
+        }
+      },
+      "required": [
+        "main_source",
+        "source_type",
+        "drawing_2d_url",
+        "drawing_2d_file_type"
+      ],
+      "additionalProperties": false
+    },
+    "standardReference": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": ["name", "purpose"],
+      "additionalProperties": false
+    },
+    "referenceSource": {
+      "type": "object",
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": [
+            "dimensioning_standard",
+            "land_pattern_thermal_reference"
+          ]
+        },
+        "source_name": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "source_type",
+        "source_name"
+      ],
+      "additionalProperties": false
+    },
+    "propertyList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/packageProperty"
+      }
+    },
+    "packageProperty": {
+      "type": "object",
+      "properties": {
+        "property_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "value": {
+          "type": ["number", "string", "array", "null"],
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "classifications": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/dimensionClassification"
+          }
+        },
+        "source_override": {
+          "type": ["string", "null"],
+          "format": "uri"
+        }
+      },
+      "required": [
+        "property_id",
+        "value",
+        "classifications"
+      ],
+      "additionalProperties": false
+    },
+    "dimensionClassification": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "NOM",
+            "MIN",
+            "MAX",
+            "REF",
+            "BSC",
+            "TYP",
+            "DIA",
+            "RAD",
+            "ANGLE",
+            "DEP"
+          ]
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "value_status",
+            "drawing_basis",
+            "geometric_form",
+            "tolerance_basis",
+            "configuration"
+          ]
+        }
+      },
+      "required": ["code", "category"],
+      "additionalProperties": false
+    },
+    "bgaTerminology": {
+      "type": "object",
+      "description": "Definitions from JEDEC JEP95 Design Guide 4.7 and Design Guide 4.17.",
+      "properties": {
+        "A": {
+          "const": "Distance from the seating plane to the highest point of the package body."
+        },
+        "A1": {
+          "const": "Vertical distance from the seating plane to the lowest point of the package body."
+        },
+        "A2": {
+          "const": "Thickness of the package body excluding ball height."
+        },
+        "b": {
+          "const": "Ball diameter measured in a plane parallel to the seating plane."
+        },
+        "b1": {
+          "const": "Diameter of the solderable substrate surface."
+        },
+        "D": {
+          "const": "Body dimension parallel to the major axis of the ball matrix."
+        },
+        "E": {
+          "const": "Body dimension parallel to the minor axis of the ball matrix."
+        },
+        "D1": {
+          "const": "Distance between the centerlines of the two outermost ball rows perpendicular to the major axis."
+        },
+        "E1": {
+          "const": "Distance between the centerlines of the two outermost ball rows perpendicular to the minor axis."
+        },
+        "e": {
+          "const": "Distance between adjacent ball centerlines when the major- and minor-axis pitches are equal."
+        },
+        "eD": {
+          "const": "Distance between adjacent ball centerlines in the major-axis direction."
+        },
+        "eE": {
+          "const": "Distance between adjacent ball centerlines in the minor-axis direction."
+        },
+        "MD": {
+          "const": "Number of balls in a fully populated row parallel to the major axis."
+        },
+        "ME": {
+          "const": "Number of balls in a fully populated row parallel to the minor axis."
+        },
+        "n": {
+          "const": "Actual number of balls, excluding depopulated locations."
+        },
+        "SD": {
+          "const": "Distance from the centermost ball row or column to datum A."
+        },
+        "SE": {
+          "const": "Distance from the centermost ball row or column to datum B."
+        },
+        "aaa": {
+          "const": "Tolerance controlling the profile and orientation of the package-body sides."
+        },
+        "bbb": {
+          "const": "Tolerance controlling parallelism of the package top surface to seating-plane datum C."
+        },
+        "ccc": {
+          "const": "Unidirectional profile tolerance controlling ball coplanarity relative to seating-plane datum C."
+        },
+        "ddd": {
+          "const": "Cylindrical true-position tolerance controlling the ball pattern relative to datums A and B."
+        },
+        "eee": {
+          "const": "Cylindrical tolerance controlling relative ball positions within the matrix."
+        },
+        "seating_plane": {
+          "const": "Plane defined by the crowns of at least three non-collinear supporting balls."
+        },
+        "datum_A": {
+          "const": "Axis of the feature defined by dimension D."
+        },
+        "datum_B": {
+          "const": "Axis of the feature defined by dimension E."
+        },
+        "datum_C": {
+          "const": "The seating plane used as the primary measurement reference."
+        },
+        "depopulation": {
+          "const": "Omission of balls from a full MD by ME matrix."
+        },
+        "ball_height": {
+          "const": "Perpendicular distance from the package substrate to the apex of a ball."
+        },
+        "standoff": {
+          "const": "Distance between the package body and the seating plane."
+        },
+        "mounting_height": {
+          "const": "Height of the mounted package measured from the board reference surface."
+        },
+        "coplanarity": {
+          "const": "Variation of ball contact heights relative to the seating plane."
+        },
+        "flatness": {
+          "const": "Deviation of a package surface from its specified reference plane."
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

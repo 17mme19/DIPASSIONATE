@@ -1,0 +1,404 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Microchip Semiconductor Package",
+  "description": "Schema for Microchip package metadata extracted from the package comparison workbook and manufacturer drawing data. Numeric fields are split into nom/min/max when the source property includes those qualifiers.",
+  "type": "object",
+  "properties": {
+    "manufacturer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "package_code": {
+      "type": "string",
+      "minLength": 1
+    },
+    "package_family": {
+      "type": "string",
+      "enum": ["QFN", "QFP", "BGA", "LFBGA", "PBGA", "HVQFN"]
+    },
+    "package_sub_family": {
+      "type": ["string", "null"]
+    },
+    "package_description": {
+      "type": ["string", "null"]
+    },
+    "drawing_number": {
+      "type": ["string", "null"]
+    },
+    "package_variant": {
+      "type": ["string", "null"]
+    },
+    "document_year": {
+      "type": ["integer", "null"],
+      "minimum": 1900
+    },
+    "mounting_technology": {
+      "type": ["string", "null"]
+    },
+    "connection_technology": {
+      "type": ["string", "null"]
+    },
+    "terminal_count": {
+      "type": ["integer", "null"],
+      "minimum": 1
+    },
+    "ball_array_columns": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "description": "Number of ball positions in the package width direction. JEDEC DGuide4-7F symbol ME."
+    },
+    "ball_array_rows": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "description": "Number of ball positions in the package length direction. JEDEC DGuide4-7F symbol MD."
+    },
+    "ball_array_population": {
+      "type": ["string", "null"],
+      "description": "Whether the matrix is full or depopulated."
+    },
+    "ball_depopulation_pattern": {
+      "type": ["string", "null"],
+      "description": "Description of omitted ball locations in the full MD x ME matrix. JEDEC DGuide4-7F section 4.7.4.5."
+    },
+    "visual_index_feature": {
+      "type": ["string", "null"]
+    },
+    "package_body_material": {
+      "type": ["string", "null"]
+    },
+    "terminals_or_balls_material": {
+      "type": ["string", "null"]
+    },
+    "terminal_pitch_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0,
+      "description": "Center-to-center spacing between adjacent balls. JEDEC DGuide4-7F symbol e, or eD/eE when pitches differ."
+    },
+    "terminal_pitch_min_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "terminal_pitch_max_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "overall_height_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "overall_height_min_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "overall_height_max_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0,
+      "description": "Maximum distance from the seating plane to the highest point of the package body. JEDEC DGuide4-7F symbol A."
+    },
+    "overall_length_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "overall_length_min_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "overall_length_max_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0,
+      "description": "Maximum package body dimension parallel to the major ball-matrix axis. JEDEC DGuide4-7F symbol D."
+    },
+    "overall_width_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "overall_width_min_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "overall_width_max_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0,
+      "description": "Maximum package body dimension parallel to the minor ball-matrix axis. JEDEC DGuide4-7F symbol E."
+    },
+    "mold_thickness_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "mold_thickness_min_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "mold_thickness_max_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "substrate_thickness_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "substrate_thickness_min_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "substrate_thickness_max_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "heat_sink_thickness_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "heat_sink_thickness_min_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "heat_sink_thickness_max_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "ball_height_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "ball_height_min_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "ball_height_max_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0,
+      "description": "Maximum perpendicular distance from the substrate surface to the ball apex. JEDEC DGuide4-17C section 4.17.11."
+    },
+    "ball_diameter_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "ball_diameter_min_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "ball_diameter_max_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0,
+      "description": "Maximum measured ball diameter in a plane parallel to the seating plane. JEDEC DGuide4-7F symbol b."
+    },
+    "ball_array_length_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0,
+      "description": "Distance between the centerlines of the outermost ball rows along the major axis. JEDEC DGuide4-7F symbol D1."
+    },
+    "ball_array_length_min_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "ball_array_length_max_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "ball_array_width_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0,
+      "description": "Distance between the centerlines of the outermost ball rows along the minor axis. JEDEC DGuide4-7F symbol E1."
+    },
+    "ball_array_width_min_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "ball_array_width_max_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "land_pattern_contact_pitch_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "land_pattern_contact_pitch_min_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "land_pattern_contact_pitch_max_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "contact_pad_spacing_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "contact_pad_spacing_min_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "contact_pad_spacing_max_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "contact_pad_width_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "contact_pad_width_min_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "contact_pad_width_max_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "contact_pad_length_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "contact_pad_length_min_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "contact_pad_length_max_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "contact_pad_to_contact_pad_min_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "optional_center_pad_width_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "optional_center_pad_length_nom_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "contact_pad_diameter_max_mm": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "dimensioning_standard": {
+      "type": ["string", "null"],
+      "description": "Dimensioning and tolerancing standard used by the source drawing."
+    },
+    "land_pattern_thermal_reference": {
+      "type": ["string", "null"]
+    },
+    "source": {
+      "type": ["string", "null"],
+      "description": "Source workbook, manufacturer drawing, or URL from which the record was extracted."
+    }
+  },
+  "required": [
+    "manufacturer",
+    "package_code",
+    "package_family",
+    "package_sub_family",
+    "package_description",
+    "drawing_number",
+    "package_variant",
+    "mounting_technology",
+    "connection_technology",
+    "terminal_count",
+    "terminal_pitch_nom_mm",
+    "terminal_pitch_min_mm",
+    "terminal_pitch_max_mm",
+    "overall_height_nom_mm",
+    "overall_height_min_mm",
+    "overall_height_max_mm",
+    "overall_length_nom_mm",
+    "overall_length_min_mm",
+    "overall_length_max_mm",
+    "overall_width_nom_mm",
+    "overall_width_min_mm",
+    "overall_width_max_mm",
+    "source"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "bgaTerminology": {
+      "type": "object",
+      "description": "JEDEC terminology used when interpreting BGA and LFBGA manufacturer drawings.",
+      "properties": {
+        "A": {
+          "const": "overall package height from the seating plane to the highest point of the package body"
+        },
+        "A1": {
+          "const": "vertical distance from the seating plane to the lowest point of the package body"
+        },
+        "A2": {
+          "const": "package body thickness excluding ball height"
+        },
+        "b": {
+          "const": "ball diameter measured in a plane parallel to the seating plane"
+        },
+        "b1": {
+          "const": "diameter of the solderable substrate surface"
+        },
+        "D": {
+          "const": "body dimension parallel to the major ball-matrix axis"
+        },
+        "E": {
+          "const": "body dimension parallel to the minor ball-matrix axis"
+        },
+        "D1": {
+          "const": "distance between outermost ball-row centerlines along the major axis"
+        },
+        "E1": {
+          "const": "distance between outermost ball-row centerlines along the minor axis"
+        },
+        "e": {
+          "const": "center-to-center pitch between adjacent balls when eD equals eE"
+        },
+        "eD": {
+          "const": "ball pitch in the major-axis direction"
+        },
+        "eE": {
+          "const": "ball pitch in the minor-axis direction"
+        },
+        "MD": {
+          "const": "number of balls in a fully populated row parallel to the major axis"
+        },
+        "ME": {
+          "const": "number of balls in a fully populated row parallel to the minor axis"
+        },
+        "n": {
+          "const": "actual number of balls, excluding depopulated locations"
+        },
+        "SD": {
+          "const": "distance from the centermost ball row or column to datum A"
+        },
+        "SE": {
+          "const": "distance from the centermost ball row or column to datum B"
+        },
+        "aaa": {
+          "const": "tolerance controlling package-body side profile and orientation"
+        },
+        "bbb": {
+          "const": "tolerance controlling top-surface parallelism to seating-plane datum C"
+        },
+        "ccc": {
+          "const": "unidirectional ball coplanarity profile tolerance relative to datum C"
+        },
+        "ddd": {
+          "const": "ball-pattern true-position tolerance relative to datums A and B"
+        },
+        "eee": {
+          "const": "relative ball-position tolerance within the matrix"
+        },
+        "datum_A": {
+          "const": "axis of the feature defined by dimension D"
+        },
+        "datum_B": {
+          "const": "axis of the feature defined by dimension E"
+        },
+        "datum_C": {
+          "const": "seating plane defined by the crowns of the supporting balls"
+        },
+        "seating_plane": {
+          "const": "plane defined by contact of at least three non-collinear supporting ball crowns"
+        },
+        "depopulation": {
+          "const": "omission of balls from a full MD x ME matrix"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

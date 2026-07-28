@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "IC Package Property Catalog",
+  "description": "Catalog of reusable IC package definitions. Package-specific values belong in package records.",
+  "type": "object",
+  "properties": {
+    "properties": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/propertyDefinition"
+      }
+    }
+  },
+  "required": ["properties"],
+  "additionalProperties": false,
+  "$defs": {
+    "propertyDefinition": {
+      "type": "object",
+      "properties": {
+        "property_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "property": {
+          "type": "string",
+          "minLength": 1
+        },
+        "symbol": {
+          "type": ["string", "null"]
+        },
+        "group": {
+          "type": "string",
+          "enum": [
+            "IDENTIFICATION",
+            "MANUFACTURING",
+            "INTERCONNECTION",
+            "GEOMETRY",
+            "THERMAL_INTERCONNECTION",
+            "LAND_PATTERN_GEOMETRY"
+          ]
+        },
+        "data_type": {
+          "type": "string",
+          "enum": [
+            "TEXT",
+            "INTEGER",
+            "DECIMAL",
+            "BOOLEAN",
+            "TEXT_ARRAY"
+          ]
+        },
+        "unit": {
+          "type": ["string", "null"],
+          "enum": [
+            "mm",
+            "degree",
+            "count",
+            "text",
+            null
+          ]
+        },
+        "definition": {
+          "type": ["string", "null"]
+        },
+        "applies_to": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "ALL",
+              "QFN",
+              "QFP",
+              "BGA"
+            ]
+          }
+        },
+        "allowed_classifications": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "MIN",
+              "NOM",
+              "MAX",
+              "REF",
+              "BSC",
+              "TYP",
+              "DIA",
+              "RAD",
+              "ANGLE",
+              "DEP"
+            ]
+          }
+        },
+        "mandatory": {
+          "type": "boolean"
+        },
+        "used_for": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "FILTERING",
+              "RANKING",
+              "DISPLAY",
+              "GEOMETRY_GENERATION"
+            ]
+          }
+        }
+      },
+      "required": [
+        "property_id",
+        "property",
+        "group",
+        "data_type",
+        "unit",
+        "applies_to",
+        "allowed_classifications",
+        "mandatory",
+        "used_for"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

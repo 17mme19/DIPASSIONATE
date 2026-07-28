@@ -1,0 +1,309 @@
+{
+  "manufacturer": "MICROCHIP TECHNOLOGY INC.",
+  "package_code": "ALB",
+  "package_family": "BGA",
+  "package_sub_family": "LFBGA",
+  "drawing_number": "C04-21123",
+  "document_year": 2017,
+  "package_description": "176-Ball Low Profile Fine Pitch Ball Grid Array - 13x13x1.5 mm Body [LFBGA]",
+  "package_variant": null,
+  "mounting_technology": "SURFACE",
+  "connection_technology": "SOLDER BALLS",
+  "source": {
+    "main_source": "Microchip.xlsx / C04-21123",
+    "source_type": "manufacturer_workbook",
+    "drawing_2d_url": null,
+    "drawing_2d_file_type": null,
+    "drawing_number": "C04-21123",
+    "document_year": 2017,
+    "reference_sources": [],
+    "standards": [
+      {
+        "name": "ASME Y14.5M",
+        "purpose": "Dimensioning standard reported by the manufacturer source."
+      },
+      {
+        "name": "IPC-7093",
+        "purpose": "Land-pattern thermal reference reported by the manufacturer source."
+      }
+    ]
+  },
+  "properties": {
+    "identification": [
+      {
+        "property_id": "visual_index_feature",
+        "value": "HATCHED AREA / VISUAL INDEX FEATURE",
+        "classifications": []
+      }
+    ],
+    "manufacturing": [
+      {
+        "property_id": "dimensioning_standard",
+        "value": "ASME Y14.5M",
+        "classifications": []
+      }
+    ],
+    "interconnection": [
+      {
+        "property_id": "terminal_count",
+        "value": 176,
+        "classifications": []
+      },
+      {
+        "property_id": "ball_pitch",
+        "value": 0.8,
+        "classifications": [
+          {
+            "code": "NOM",
+            "category": "value_status"
+          }
+        ]
+      },
+      {
+        "property_id": "ball_array_columns",
+        "value": 15,
+        "classifications": []
+      },
+      {
+        "property_id": "ball_array_rows",
+        "value": 15,
+        "classifications": []
+      },
+      {
+        "property_id": "maximum_possible_terminals",
+        "value": 225,
+        "classifications": []
+      },
+      {
+        "property_id": "actual_terminals",
+        "value": 176,
+        "classifications": []
+      },
+      {
+        "property_id": "array_population_type",
+        "value": "DEPOPULATED",
+        "classifications": []
+      },
+      {
+        "property_id": "unpopulated_array_coordinates",
+        "value": [
+          "E5",
+          "F5",
+          "G5",
+          "H5",
+          "J5",
+          "K5",
+          "L5",
+          "E6",
+          "F6",
+          "G6",
+          "H6",
+          "J6",
+          "K6",
+          "L6",
+          "E7",
+          "F7",
+          "G7",
+          "H7",
+          "J7",
+          "K7",
+          "L7",
+          "E8",
+          "F8",
+          "G8",
+          "H8",
+          "J8",
+          "K8",
+          "L8",
+          "E9",
+          "F9",
+          "G9",
+          "H9",
+          "J9",
+          "K9",
+          "L9",
+          "E10",
+          "F10",
+          "G10",
+          "H10",
+          "J10",
+          "K10",
+          "L10",
+          "E11",
+          "F11",
+          "G11",
+          "H11",
+          "J11",
+          "K11",
+          "L11"
+        ],
+        "classifications": [
+          {
+            "code": "DEP",
+            "category": "configuration"
+          }
+        ]
+      },
+      {
+        "property_id": "ball_height",
+        "value": 0.35,
+        "classifications": [
+          {
+            "code": "MIN",
+            "category": "value_status"
+          }
+        ]
+      },
+      {
+        "property_id": "ball_height",
+        "value": 0.425,
+        "classifications": [
+          {
+            "code": "NOM",
+            "category": "value_status"
+          }
+        ]
+      },
+      {
+        "property_id": "ball_height",
+        "value": 0.5,
+        "classifications": [
+          {
+            "code": "MAX",
+            "category": "value_status"
+          }
+        ]
+      },
+      {
+        "property_id": "ball_array_length",
+        "value": 11.2,
+        "classifications": []
+      },
+      {
+        "property_id": "ball_array_width",
+        "value": 11.2,
+        "classifications": []
+      },
+      {
+        "property_id": "ball_diameter",
+        "value": 0.45,
+        "classifications": [
+          {
+            "code": "MIN",
+            "category": "value_status"
+          }
+        ]
+      },
+      {
+        "property_id": "ball_diameter",
+        "value": 0.5,
+        "classifications": [
+          {
+            "code": "NOM",
+            "category": "value_status"
+          }
+        ]
+      },
+      {
+        "property_id": "ball_diameter",
+        "value": 0.55,
+        "classifications": [
+          {
+            "code": "MAX",
+            "category": "value_status"
+          }
+        ]
+      }
+    ],
+    "geometry": [
+      {
+        "property_id": "overall_package_height",
+        "value": null,
+        "classifications": [
+          {
+            "code": "MIN",
+            "category": "value_status"
+          }
+        ]
+      },
+      {
+        "property_id": "overall_package_height",
+        "value": null,
+        "classifications": [
+          {
+            "code": "NOM",
+            "category": "value_status"
+          }
+        ]
+      },
+      {
+        "property_id": "overall_package_height",
+        "value": 1.5,
+        "classifications": [
+          {
+            "code": "MAX",
+            "category": "value_status"
+          }
+        ]
+      },
+      {
+        "property_id": "overall_package_length",
+        "value": 13.0,
+        "classifications": [
+          {
+            "code": "NOM",
+            "category": "value_status"
+          }
+        ]
+      },
+      {
+        "property_id": "overall_package_width",
+        "value": 13.0,
+        "classifications": [
+          {
+            "code": "NOM",
+            "category": "value_status"
+          }
+        ]
+      }
+    ],
+    "thermal_interconnection": [],
+    "land_pattern_geometry": [
+      {
+        "property_id": "land_pattern_thermal_reference",
+        "value": null,
+        "classifications": []
+      },
+      {
+        "property_id": "contact_pitch",
+        "value": 0.8,
+        "classifications": [
+          {
+            "code": "NOM",
+            "category": "value_status"
+          }
+        ]
+      },
+      {
+        "property_id": "contact_pad_spacing_c1",
+        "value": null,
+        "classifications": [
+          {
+            "code": "NOM",
+            "category": "value_status"
+          }
+        ]
+      },
+      {
+        "property_id": "contact_pad_spacing_c2",
+        "value": null,
+        "classifications": [
+          {
+            "code": "NOM",
+            "category": "value_status"
+          }
+        ]
+      }
+    ]
+  }
+}

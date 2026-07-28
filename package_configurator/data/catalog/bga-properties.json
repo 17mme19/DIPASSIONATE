@@ -1,0 +1,701 @@
+{
+  "properties": [
+    {
+      "property_id": "manufacturer",
+      "property": "Manufacturer",
+      "symbol": null,
+      "group": "IDENTIFICATION",
+      "data_type": "TEXT",
+      "unit": "text",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": true,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY"
+      ]
+    },
+    {
+      "property_id": "package_code",
+      "property": "Package Code",
+      "symbol": null,
+      "group": "IDENTIFICATION",
+      "data_type": "TEXT",
+      "unit": "text",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": true,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY"
+      ]
+    },
+    {
+      "property_id": "package_family",
+      "property": "Package Family",
+      "symbol": null,
+      "group": "IDENTIFICATION",
+      "data_type": "TEXT",
+      "unit": "text",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": true,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY"
+      ]
+    },
+    {
+      "property_id": "package_description",
+      "property": "Package Description",
+      "symbol": null,
+      "group": "IDENTIFICATION",
+      "data_type": "TEXT",
+      "unit": "text",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY"
+      ]
+    },
+    {
+      "property_id": "package_sub_family",
+      "property": "Package Sub-Family",
+      "symbol": null,
+      "group": "IDENTIFICATION",
+      "data_type": "TEXT",
+      "unit": "text",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY"
+      ]
+    },
+    {
+      "property_id": "drawing_number",
+      "property": "Drawing Number",
+      "symbol": null,
+      "group": "MANUFACTURING",
+      "data_type": "TEXT",
+      "unit": "text",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY"
+      ]
+    },
+    {
+      "property_id": "document_year",
+      "property": "Document Year",
+      "symbol": null,
+      "group": "MANUFACTURING",
+      "data_type": "INTEGER",
+      "unit": "count",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY"
+      ]
+    },
+    {
+      "property_id": "package_variant",
+      "property": "Package Variant",
+      "symbol": null,
+      "group": "IDENTIFICATION",
+      "data_type": "TEXT",
+      "unit": "text",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY"
+      ]
+    },
+    {
+      "property_id": "mounting_technology",
+      "property": "Mounting Technology",
+      "symbol": null,
+      "group": "MANUFACTURING",
+      "data_type": "TEXT",
+      "unit": "text",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY"
+      ]
+    },
+    {
+      "property_id": "connection_technology",
+      "property": "Connection Technology",
+      "symbol": null,
+      "group": "INTERCONNECTION",
+      "data_type": "TEXT",
+      "unit": "text",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY"
+      ]
+    },
+    {
+      "property_id": "terminal_count",
+      "property": "Number of Pins/Terminals",
+      "symbol": "n",
+      "group": "INTERCONNECTION",
+      "data_type": "INTEGER",
+      "unit": "count",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": true,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "ball_pitch",
+      "property": "Ball Pitch",
+      "symbol": "e",
+      "group": "INTERCONNECTION",
+      "data_type": "DECIMAL",
+      "unit": "mm",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [
+        "NOM",
+        "BSC"
+      ],
+      "mandatory": true,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "overall_package_height",
+      "property": "Overall Package Height",
+      "symbol": "A",
+      "group": "GEOMETRY",
+      "data_type": "DECIMAL",
+      "unit": "mm",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [
+        "MIN",
+        "NOM",
+        "MAX"
+      ],
+      "mandatory": false,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "overall_package_length",
+      "property": "Overall Package Length",
+      "symbol": "D",
+      "group": "GEOMETRY",
+      "data_type": "DECIMAL",
+      "unit": "mm",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [
+        "MIN",
+        "NOM",
+        "MAX"
+      ],
+      "mandatory": false,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "overall_package_width",
+      "property": "Overall Package Width",
+      "symbol": "E",
+      "group": "GEOMETRY",
+      "data_type": "DECIMAL",
+      "unit": "mm",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [
+        "MIN",
+        "NOM",
+        "MAX"
+      ],
+      "mandatory": false,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "visual_index_feature",
+      "property": "Hatched Area / Visual Index Feature",
+      "symbol": null,
+      "group": "IDENTIFICATION",
+      "data_type": "TEXT",
+      "unit": "text",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY"
+      ]
+    },
+    {
+      "property_id": "ball_array_columns",
+      "property": "Ball Array Columns",
+      "symbol": "MD",
+      "group": "INTERCONNECTION",
+      "data_type": "INTEGER",
+      "unit": "count",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "ball_array_rows",
+      "property": "Ball Array Rows",
+      "symbol": "ME",
+      "group": "INTERCONNECTION",
+      "data_type": "INTEGER",
+      "unit": "count",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "maximum_possible_terminals",
+      "property": "Maximum Possible Terminals",
+      "symbol": null,
+      "group": "INTERCONNECTION",
+      "data_type": "INTEGER",
+      "unit": "count",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY"
+      ]
+    },
+    {
+      "property_id": "actual_terminals",
+      "property": "Actual Terminals",
+      "symbol": "n",
+      "group": "INTERCONNECTION",
+      "data_type": "INTEGER",
+      "unit": "count",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "array_population_type",
+      "property": "Array Population Type",
+      "symbol": null,
+      "group": "INTERCONNECTION",
+      "data_type": "TEXT",
+      "unit": "text",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [
+        "DEP"
+      ],
+      "mandatory": false,
+      "used_for": [
+        "FILTERING",
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "unpopulated_array_coordinates",
+      "property": "Unpopulated Array Coordinates",
+      "symbol": null,
+      "group": "INTERCONNECTION",
+      "data_type": "TEXT_ARRAY",
+      "unit": "text",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [
+        "DEP"
+      ],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "ball_height",
+      "property": "Ball Height",
+      "symbol": "A1",
+      "group": "INTERCONNECTION",
+      "data_type": "DECIMAL",
+      "unit": "mm",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [
+        "MIN",
+        "NOM",
+        "MAX"
+      ],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "heat_sink_thickness",
+      "property": "Heat Sink Thickness",
+      "symbol": "A2",
+      "group": "THERMAL_INTERCONNECTION",
+      "data_type": "DECIMAL",
+      "unit": "mm",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "molded_cap_height",
+      "property": "Molded Cap Height",
+      "symbol": "A3",
+      "group": "THERMAL_INTERCONNECTION",
+      "data_type": "DECIMAL",
+      "unit": "mm",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [
+        "MIN",
+        "NOM",
+        "MAX"
+      ],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "mold_cap_thickness",
+      "property": "Mold Cap Thickness",
+      "symbol": "A2",
+      "group": "THERMAL_INTERCONNECTION",
+      "data_type": "DECIMAL",
+      "unit": "mm",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [
+        "MIN",
+        "NOM",
+        "MAX"
+      ],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "mold_thickness",
+      "property": "Mold Thickness",
+      "symbol": "M",
+      "group": "THERMAL_INTERCONNECTION",
+      "data_type": "DECIMAL",
+      "unit": "mm",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "substrate_thickness",
+      "property": "Substrate Thickness",
+      "symbol": "S",
+      "group": "THERMAL_INTERCONNECTION",
+      "data_type": "DECIMAL",
+      "unit": "mm",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [
+        "MIN",
+        "NOM",
+        "MAX"
+      ],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "ball_array_length",
+      "property": "Ball Array Length",
+      "symbol": "D2",
+      "group": "INTERCONNECTION",
+      "data_type": "DECIMAL",
+      "unit": "mm",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "ball_array_width",
+      "property": "Ball Array Width",
+      "symbol": "E2",
+      "group": "INTERCONNECTION",
+      "data_type": "DECIMAL",
+      "unit": "mm",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "ball_diameter",
+      "property": "Ball / Terminal Diameter",
+      "symbol": "b",
+      "group": "INTERCONNECTION",
+      "data_type": "DECIMAL",
+      "unit": "mm",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [
+        "MIN",
+        "NOM",
+        "MAX"
+      ],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "contact_pitch",
+      "property": "Contact Pitch",
+      "symbol": "E",
+      "group": "LAND_PATTERN_GEOMETRY",
+      "data_type": "DECIMAL",
+      "unit": "mm",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [
+        "NOM"
+      ],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "contact_pad_spacing_c1",
+      "property": "Contact Pad Spacing C1",
+      "symbol": "C1",
+      "group": "LAND_PATTERN_GEOMETRY",
+      "data_type": "DECIMAL",
+      "unit": "mm",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [
+        "NOM"
+      ],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "contact_pad_spacing_c2",
+      "property": "Contact Pad Spacing C2",
+      "symbol": "C2",
+      "group": "LAND_PATTERN_GEOMETRY",
+      "data_type": "DECIMAL",
+      "unit": "mm",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [
+        "NOM"
+      ],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY",
+        "GEOMETRY_GENERATION"
+      ]
+    },
+    {
+      "property_id": "dimensioning_standard",
+      "property": "Dimensioning Standard",
+      "symbol": null,
+      "group": "MANUFACTURING",
+      "data_type": "TEXT",
+      "unit": "text",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY"
+      ]
+    },
+    {
+      "property_id": "land_pattern_thermal_reference",
+      "property": "Land Pattern Thermal Reference",
+      "symbol": null,
+      "group": "LAND_PATTERN_GEOMETRY",
+      "data_type": "TEXT",
+      "unit": "text",
+      "definition": null,
+      "applies_to": [
+        "BGA"
+      ],
+      "allowed_classifications": [],
+      "mandatory": false,
+      "used_for": [
+        "DISPLAY"
+      ]
+    }
+  ]
+}
