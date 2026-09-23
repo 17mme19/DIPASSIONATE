@@ -52,8 +52,6 @@ try:
     from ui import TechConfigDialog  # noqa: F401  (side-effect: registers TechConfigCommand)
     from pcb import PCBImportCommand      # noqa: F401
     from pcb import PCBPlacementCommand   # noqa: F401
-    from routing import TraceRoutingCommand   # noqa: F401
-    from package_configurator import freecad_command as _BgaPackageGeneratorCommand  # noqa: F401
 
     FreeCAD.Console.PrintMessage("Commands loaded successfully\n")
 except Exception as e:
@@ -290,8 +288,6 @@ class MyWorkbench(FreeCADGui.Workbench):
             _QtCore.QTimer.singleShot(350, self._inject_toolbar_labels)
             _QtCore.QTimer.singleShot(400, self._inject_tech_status_label)
             _QtCore.QTimer.singleShot(400, self._hide_wirebond_session_toolbar)
-            _QtCore.QTimer.singleShot(400, self._hide_trace_routing_session_toolbar)
-            _QtCore.QTimer.singleShot(500, self._ensure_bga_menu_action)
 
             _FreeCAD.Console.PrintMessage("Toolbars initialized\n")
         except Exception as e:
