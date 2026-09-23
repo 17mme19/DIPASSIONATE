@@ -26,7 +26,7 @@
   "ball_array_rows": 12,
   "ball_array_population": "FULL",
   "ball_depopulation_pattern": "NO",
-  "visual_index_feature": "HATCHED AREA / VISUAL INDEX FEATURE",
+  "visual_index_feature": "PIN-1 / A1 INDICATOR",
   "package_body_material": null,
   "terminals_or_balls_material": null,
   "ball_height_nom_mm": null,

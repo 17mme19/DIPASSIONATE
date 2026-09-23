@@ -54,6 +54,12 @@ while adding this. Worth unifying later if that function grows test
 coverage.
 """
 
+import gzip
+import os
+import shutil
+import tempfile
+from dataclasses import dataclass
+
 import gdstk
 import Part
 import FreeCAD
@@ -90,7 +96,7 @@ def get_die_footprint_mm(gds_path) -> tuple:
 
     Raises ValueError if the GDS has no top-level geometry to measure.
     """
-    lib   = gdstk.read_gds(str(gds_path))
+    lib   = _read_gds_library(gds_path)
     scale = (lib.unit * 1000.0) if getattr(lib, "unit", None) else 0.001
     cells = lib.top_level() or lib.cells
 
@@ -259,6 +265,114 @@ def _find_named_cell_refs(cell, matches_fn, _cache, _depth: int = 0, _max_depth:
 _DEFAULT_PAD_SIZE_MM = 0.05   # 50 µm square
 
 
+@dataclass(frozen=True)
+class ChipRequirements:
+    """Package-selection requirements derived from a chip proxy."""
+
+    die_length_mm: float
+    die_width_mm: float
+    pad_count: int
+    pad_arrangement: str
+    pads_per_side: dict[str, int]
+    pad_pitch_mm: float | None
+    max_pad_width_mm: float | None
+    max_pad_height_mm: float | None
+    die_thickness_mm: float | None = None
+    die_thickness_source: str = "unknown"
+
+
+def derive_chip_requirements(proxy_data: dict) -> ChipRequirements:
+    """Derive package-selection requirements from extracted proxy data."""
+    xmin, ymin, xmax, ymax = proxy_data["footprint_mm"]
+    die_length_mm = xmax - xmin
+    die_width_mm = ymax - ymin
+    pads = list(proxy_data.get("pads", []))
+    if die_length_mm <= 0 or die_width_mm <= 0:
+        raise ValueError("Chip footprint must have positive length and width.")
+
+    edge_tolerance = min(die_length_mm, die_width_mm) * 0.10
+    side_counts = {"left": 0, "right": 0, "top": 0, "bottom": 0}
+    side_positions: dict[str, list[float]] = {
+        side: [] for side in side_counts
+    }
+    for pad in pads:
+        x = float(pad["x_mm"])
+        y = float(pad["y_mm"])
+        distances = {
+            "left": abs(x - xmin),
+            "right": abs(xmax - x),
+            "bottom": abs(y - ymin),
+            "top": abs(ymax - y),
+        }
+        side, distance = min(distances.items(), key=lambda item: item[1])
+        if distance <= edge_tolerance:
+            side_counts[side] += 1
+            side_positions[side].append(
+                y if side in ("left", "right") else x
+            )
+
+    non_empty_sides = sum(count > 0 for count in side_counts.values())
+    arrangement = (
+        "peripheral_four_sided" if non_empty_sides == 4
+        else "peripheral" if non_empty_sides
+        else "unknown"
+    )
+    pitch_values = []
+    for positions in side_positions.values():
+        positions.sort()
+        pitch_values.extend(
+            b - a for a, b in zip(positions, positions[1:])
+            if b - a > 1e-6
+        )
+    pad_pitch_mm = (
+        sum(pitch_values) / len(pitch_values) if pitch_values else None
+    )
+    pad_sizes = [
+        (float(p["width_mm"]), float(p["height_mm"]))
+        for p in pads
+        if p.get("width_mm") is not None and p.get("height_mm") is not None
+    ]
+    return ChipRequirements(
+        die_length_mm=die_length_mm,
+        die_width_mm=die_width_mm,
+        pad_count=len(pads),
+        pad_arrangement=arrangement,
+        pads_per_side=side_counts,
+        pad_pitch_mm=pad_pitch_mm,
+        max_pad_width_mm=max((size[0] for size in pad_sizes), default=None),
+        max_pad_height_mm=max((size[1] for size in pad_sizes), default=None),
+        die_thickness_mm=(
+            float(proxy_data["thickness_mm"])
+            if proxy_data.get("thickness_mm") is not None
+            else None
+        ),
+        die_thickness_source=proxy_data.get("thickness_source", "unknown"),
+    )
+
+
+def _read_gds_library(gds_path):
+    """Read plain or gzip-compressed GDS without exposing temp-file details."""
+    path = os.fspath(gds_path)
+    if not path.lower().endswith(".gz"):
+        return gdstk.read_gds(path)
+
+    temporary_path = None
+    try:
+        with gzip.open(path, "rb") as source:
+            with tempfile.NamedTemporaryFile(
+                suffix=".gds", delete=False
+            ) as temporary:
+                temporary_path = temporary.name
+                shutil.copyfileobj(source, temporary)
+        return gdstk.read_gds(temporary_path)
+    finally:
+        if temporary_path is not None:
+            try:
+                os.unlink(temporary_path)
+            except OSError:
+                pass
+
+
 def get_named_pad_positions_mm(gds_path, name_prefixes=(), name_substrings=()) -> list:
     """
     Return [{"name", "x_mm", "y_mm", "width_mm", "height_mm"}, ...] for
@@ -281,7 +395,7 @@ def get_named_pad_positions_mm(gds_path, name_prefixes=(), name_substrings=()) -
         return (any(name_upper.startswith(p) for p in prefixes)
                 or any(s in name_upper for s in substrings))
 
-    lib   = gdstk.read_gds(str(gds_path))
+    lib   = _read_gds_library(gds_path)
     scale = (lib.unit * 1000.0) if getattr(lib, "unit", None) else 0.001
     top_cells = [c for c in (lib.top_level() or lib.cells) if not c.name.startswith("$$$")]
     if not top_cells:
@@ -372,7 +486,7 @@ def get_pad_positions_mm(gds_path, ihp_map: dict, selected_layers=None, top_n: i
         return []
 
     try:
-        lib = gdstk.read_gds(str(gds_path))
+        lib = _read_gds_library(gds_path)
     except Exception as exc:
         FreeCAD.Console.PrintError(f"[ChipProxy] pad detection: cannot read GDS: {exc}\n")
         return []
@@ -493,7 +607,7 @@ def extract_chip_proxy(gds_path, lyp_path=None, map_path=None, xml_path=None,
     )
     pads = get_bond_pad_positions_mm(gds_path, ihp_map, selected_layers, top_n_pad_layers)
 
-    return {
+    proxy = {
         "source_gds": str(gds_path),
         "source_lyp": str(lyp_path) if lyp_path else None,
         "source_map": str(map_path) if map_path else None,
@@ -504,6 +618,8 @@ def extract_chip_proxy(gds_path, lyp_path=None, map_path=None, xml_path=None,
         "thickness_source": thickness_source,
         "pads": pads,
     }
+    proxy["requirements"] = derive_chip_requirements(proxy)
+    return proxy
 
 
 # ── FreeCAD object construction ─────────────────────────────────────────────────

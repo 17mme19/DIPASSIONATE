@@ -12,6 +12,29 @@ from core.leadframe import build_leadframe
 def create_leadframe(config, doc=None, gds_objects=None):
     return build_leadframe(config, doc=doc, gds_objects=gds_objects)
 
+def _selected_chip_requirements(doc=None):
+    """Extract requirements from the selected, or only, chip proxy."""
+    doc = doc or FreeCAD.activeDocument()
+    if doc is None:
+        return None
+
+    candidates = []
+    if FreeCAD.GuiUp:
+        candidates.extend(FreeCADGui.Selection.getSelection())
+    candidates.extend(
+        obj for obj in doc.Objects
+        if getattr(obj, "IsChipProxy", False) and obj not in candidates
+    )
+
+    chip = next((obj for obj in candidates if getattr(obj, "IsChipProxy", False)), None)
+    gds_path = getattr(chip, "SourceGDS", "") if chip is not None else ""
+    if not gds_path:
+        return None
+
+    from core.chip_proxy import extract_chip_proxy
+    return extract_chip_proxy(gds_path).get("requirements")
+
+
 def configure_leadframe():
     from leadframe.LeadframeConfigurator import LeadframeConfigurator
     
@@ -20,7 +43,9 @@ def configure_leadframe():
 
     Returns: configuration
     """
-    dialog = LeadframeConfigurator()
+    dialog = LeadframeConfigurator(
+        chip_requirements=_selected_chip_requirements()
+    )
     if dialog.exec_():
         return dialog.get_config()
     return None

@@ -27,19 +27,21 @@ Layout
 
 from compat import QtWidgets, QtCore, QtGui
 from leadframe.PackageDatabase import (
-    ALL_PACKAGES, search_packages, families, PackageSpec
+    ALL_PACKAGES, search_packages, families, compatible_packages,
+    PackageRequirements, PackageSpec
 )
 
 
 class PackageSelectorDialog(QtWidgets.QDialog):
     """Select an IC package from the local JEDEC catalogue."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, chip_requirements=None):
         super().__init__(parent)
         self.setWindowTitle("IC Package Library")
         self.setMinimumWidth(680)
         self.setMinimumHeight(480)
         self._selected: PackageSpec | None = None
+        self._chip_requirements = chip_requirements
         self._build_ui()
         self._populate_table(ALL_PACKAGES)
 
@@ -77,7 +79,97 @@ class PackageSelectorDialog(QtWidgets.QDialog):
         btn_all.clicked.connect(self._show_all)
         bar.addWidget(btn_all)
 
+        if self._chip_requirements is not None:
+            btn_compatible = QtWidgets.QPushButton("Compatible with chip")
+            btn_compatible.setToolTip(
+                "Show packages matching the selected chip's pad count, "
+                "pad arrangement, and die footprint."
+            )
+            btn_compatible.clicked.connect(self._show_compatible)
+            bar.addWidget(btn_compatible)
+
         root.addLayout(bar)
+
+        if self._chip_requirements is not None:
+            workflow = QtWidgets.QLabel(
+                "Workflow: 1) choose the package family  2) apply constraints  "
+                "3) review provenance  4) use the selected package"
+            )
+            workflow.setStyleSheet(
+                "color: #93c5fd; padding: 4px 6px; font-size: 10px;"
+            )
+            root.addWidget(workflow)
+
+            constraints_box = QtWidgets.QGroupBox(
+                "2. Package requirements (optional)"
+            )
+            constraints_layout = QtWidgets.QVBoxLayout(constraints_box)
+            constraints_tabs = QtWidgets.QTabWidget()
+
+            mechanical_tab = QtWidgets.QWidget()
+            mechanical_form = QtWidgets.QFormLayout(mechanical_tab)
+            self._max_height = QtWidgets.QDoubleSpinBox()
+            self._max_height.setRange(0.0, 20.0)
+            self._max_height.setDecimals(2)
+            self._max_height.setSingleStep(0.1)
+            self._max_height.setSuffix(" mm")
+            self._max_height.setSpecialValueText("No maximum")
+            self._require_paddle = QtWidgets.QCheckBox("Require exposed die paddle")
+            self._require_cavity = QtWidgets.QCheckBox("Require open-cavity package")
+            mechanical_form.addRow(
+                "Maximum body height:", self._max_height
+            )
+            mechanical_form.addRow(self._require_paddle)
+            mechanical_form.addRow(self._require_cavity)
+            mechanical_hint = QtWidgets.QLabel(
+                "Use these constraints for package outline and die-attach geometry."
+            )
+            mechanical_hint.setStyleSheet("color: #888; font-size: 9px;")
+            mechanical_form.addRow(mechanical_hint)
+            constraints_tabs.addTab(mechanical_tab, "Mechanical")
+
+            thermal_tab = QtWidgets.QWidget()
+            thermal_form = QtWidgets.QFormLayout(thermal_tab)
+            self._power = QtWidgets.QDoubleSpinBox()
+            self._power.setRange(0.0, 1000.0)
+            self._power.setDecimals(2)
+            self._power.setSuffix(" W")
+            self._power.setSpecialValueText("Not specified")
+            self._theta_ja = QtWidgets.QDoubleSpinBox()
+            self._theta_ja.setRange(0.0, 1000.0)
+            self._theta_ja.setDecimals(1)
+            self._theta_ja.setSuffix(" °C/W")
+            self._theta_ja.setSpecialValueText("Not specified")
+            thermal_form.addRow("Required power capability:", self._power)
+            thermal_form.addRow("Maximum θJA:", self._theta_ja)
+            thermal_hint = QtWidgets.QLabel(
+                "Unknown or undocumented capability does not pass a required limit."
+            )
+            thermal_hint.setStyleSheet("color: #888; font-size: 9px;")
+            thermal_form.addRow(thermal_hint)
+            constraints_tabs.addTab(thermal_tab, "Thermal")
+
+            rf_tab = QtWidgets.QWidget()
+            rf_form = QtWidgets.QFormLayout(rf_tab)
+            self._rf_frequency = QtWidgets.QDoubleSpinBox()
+            self._rf_frequency.setRange(0.0, 1000.0)
+            self._rf_frequency.setDecimals(3)
+            self._rf_frequency.setSuffix(" GHz")
+            self._rf_frequency.setSpecialValueText("Not specified")
+            self._require_rf = QtWidgets.QCheckBox("Require RF-capable package")
+            self._require_ground = QtWidgets.QCheckBox("Require exposed RF ground")
+            rf_form.addRow("Required RF frequency:", self._rf_frequency)
+            rf_form.addRow(self._require_rf)
+            rf_form.addRow(self._require_ground)
+            rf_hint = QtWidgets.QLabel(
+                "Application frequency is not treated as a universal package limit."
+            )
+            rf_hint.setStyleSheet("color: #888; font-size: 9px;")
+            rf_form.addRow(rf_hint)
+            constraints_tabs.addTab(rf_tab, "RF")
+
+            constraints_layout.addWidget(constraints_tabs)
+            root.addWidget(constraints_box)
 
         # ── results table ─────────────────────────────────────────────
         self._table = QtWidgets.QTableWidget(0, 6)
@@ -101,6 +193,10 @@ class PackageSelectorDialog(QtWidgets.QDialog):
         self._table.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self._table.setAlternatingRowColors(True)
         self._table.setStyleSheet("font-size: 10px;")
+        self._table.setToolTip(
+            "Select a row to review package geometry, source provenance, "
+            "and wire-bond validation status."
+        )
         self._table.itemSelectionChanged.connect(self._on_selection_changed)
         self._table.doubleClicked.connect(self._on_double_click)
         root.addWidget(self._table, 1)
@@ -128,6 +224,9 @@ class PackageSelectorDialog(QtWidgets.QDialog):
         self._btn_datasheet.clicked.connect(self._open_datasheet)
         btns.addButton(self._btn_datasheet, QtWidgets.QDialogButtonBox.ActionRole)
         self._btn_use = QtWidgets.QPushButton("Use this package")
+        self._btn_use.setToolTip(
+            "Apply the selected package to the leadframe configurator."
+        )
         self._btn_use.setDefault(True)
         self._btn_use.setEnabled(False)
         self._btn_use.clicked.connect(self.accept)
@@ -195,6 +294,28 @@ class PackageSelectorDialog(QtWidgets.QDialog):
         self._cb_family.setCurrentIndex(0)
         self._populate_table(ALL_PACKAGES)
 
+    def _show_compatible(self):
+        self._le_search.clear()
+        family_text = self._cb_family.currentText()
+        family = None if family_text == "All families" else family_text
+        constraints = PackageRequirements(
+            max_body_height_mm=self._max_height.value() or None,
+            require_die_paddle=self._require_paddle.isChecked(),
+            require_open_cavity=self._require_cavity.isChecked(),
+            max_power_w=self._power.value() or None,
+            max_theta_ja_c_per_w=self._theta_ja.value() or None,
+            rf_frequency_ghz=self._rf_frequency.value() or None,
+            require_rf_capable=self._require_rf.isChecked(),
+            require_exposed_ground=self._require_ground.isChecked(),
+        )
+        self._populate_table(
+            compatible_packages(
+                self._chip_requirements,
+                family=family,
+                constraints=constraints,
+            )
+        )
+
     def _on_selection_changed(self):
         items = self._table.selectedItems()
         if not items:
@@ -224,10 +345,16 @@ class PackageSelectorDialog(QtWidgets.QDialog):
                 extra += "  |  2-sided (no top/bottom leads)"
 
         tags_str = f"  🏷 {', '.join(pkg.tags)}" if pkg.tags else ""
+        source_str = (
+            f"\nReference: {pkg.source_reference} ({pkg.source_revision})"
+            if pkg.source_reference else ""
+        )
+        wirebond_str = f"\nWire-bond status: {pkg.wirebond_status}"
         self._lbl_detail.setText(
             f"{pkg.name}  —  {pkg.description}\n"
             f"Body: {pkg.body_length_mm}×{pkg.body_width_mm}×{pkg.body_height_mm} mm  |  "
             f"{pkg.total_pins} pins  |  {extra}  |  {pkg.standard}{tags_str}"
+            f"{source_str}{wirebond_str}"
         )
 
     def _on_double_click(self, _index):

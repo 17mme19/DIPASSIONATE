@@ -9,10 +9,11 @@ from compat import QtWidgets, QtCore
 
 
 class LeadframeConfigurator(QtWidgets.QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, chip_requirements=None):
         super().__init__(parent)
         self.setWindowTitle("Leadframe Configuration")
         self.setMinimumWidth(440)
+        self._chip_requirements = chip_requirements
 
         root = QtWidgets.QVBoxLayout(self)
 
@@ -150,7 +151,7 @@ class LeadframeConfigurator(QtWidgets.QDialog):
     def _open_library(self):
         """Open the JEDEC package browser and apply the chosen package."""
         from ui.PackageSelectorDialog import PackageSelectorDialog
-        dlg = PackageSelectorDialog(self)
+        dlg = PackageSelectorDialog(self, self._chip_requirements)
         if dlg.exec_() == PackageSelectorDialog.Accepted:
             pkg = dlg.selected_package()
             if pkg is not None:

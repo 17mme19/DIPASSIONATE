@@ -52,6 +52,8 @@ try:
     from ui import TechConfigDialog  # noqa: F401  (side-effect: registers TechConfigCommand)
     from pcb import PCBImportCommand      # noqa: F401
     from pcb import PCBPlacementCommand   # noqa: F401
+    from routing import TraceRoutingCommand  # noqa: F401 (registers routing commands)
+    from package_configurator import freecad_command  # noqa: F401 (registers BGA commands)
 
     FreeCAD.Console.PrintMessage("Commands loaded successfully\n")
 except Exception as e:

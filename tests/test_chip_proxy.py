@@ -31,6 +31,7 @@ from _harness import TestCase, REPO_ROOT, new_document
 
 import core.chip_proxy as chip_proxy
 from core.Core_Functionality import parse_stackup_xml, parse_map
+from leadframe.PackageDatabase import compatible_packages
 
 _GDS = os.path.join(REPO_ROOT, "samples", "ALL_LNA.gds")
 _STACK_DIR = os.path.join(REPO_ROOT, "resources", "stack_info", "IHP-PDK_SG13G2")
@@ -38,6 +39,7 @@ _LYP = os.path.join(_STACK_DIR, "sg13g2.lyp")
 _MAP = os.path.join(_STACK_DIR, "sg13g2.map")
 _XML = os.path.join(_STACK_DIR, "SG13G2_200um.xml")
 _GDS_PADFRAME = os.path.join(REPO_ROOT, "resources", "gds", "6_final.gds")
+_IHP_GDS = os.environ.get("DIPASSIONATE_IHP_GDS", "")
 
 
 def run():
@@ -143,6 +145,72 @@ def run():
                       all(p["name"] == "bondpad_70x70" for p in pf_pads),
                       f"names: {set(p['name'] for p in pf_pads)}")
 
+    # ── external reference fixture: gzip-compressed IHP template die ────────
+    # This is intentionally optional so the repository test suite remains
+    # portable. When the user's local reference checkout is present, it
+    # verifies the real 1.6 mm / 32-pad ground-truth design.
+    if os.path.exists(_IHP_GDS):
+        def _ihp_footprint():
+            box["ihp_bbox"] = chip_proxy.get_die_footprint_mm(_IHP_GDS)
+
+        if tc.check_raises_nothing(
+            "gzip-compressed IHP reference GDS is readable", _ihp_footprint
+        ):
+            xmin, ymin, xmax, ymax = box["ihp_bbox"]
+            tc.check(
+                "IHP reference die footprint is 1.600 x 1.600 mm",
+                abs((xmax - xmin) - 1.6) < 1e-6
+                and abs((ymax - ymin) - 1.6) < 1e-6,
+                f"got {box['ihp_bbox']}",
+            )
+
+        def _ihp_pads():
+            box["ihp_pads"] = chip_proxy.get_named_pad_positions_mm(
+                _IHP_GDS, name_prefixes=("BONDPAD",)
+            )
+
+        if tc.check_raises_nothing(
+            "IHP reference named bondpads are extractable", _ihp_pads
+        ):
+            tc.check(
+                "IHP reference has 32 named bondpads",
+                len(box["ihp_pads"]) == 32,
+                f"got {len(box['ihp_pads'])}",
+            )
+
+        def _ihp_requirements():
+            box["ihp_proxy"] = chip_proxy.extract_chip_proxy(_IHP_GDS)
+            box["ihp_requirements"] = box["ihp_proxy"]["requirements"]
+
+        if tc.check_raises_nothing(
+            "IHP reference requirements are derivable", _ihp_requirements
+        ):
+            req = box["ihp_requirements"]
+            tc.check("IHP requirements report 32 pads", req.pad_count == 32)
+            tc.check(
+                "IHP requirements report eight pads per side",
+                req.pads_per_side == {
+                    "left": 8, "right": 8, "top": 8, "bottom": 8
+                },
+                f"got {req.pads_per_side}",
+            )
+            tc.check(
+                "IHP requirements report four-sided peripheral pads",
+                req.pad_arrangement == "peripheral_four_sided",
+            )
+            tc.check(
+                "IHP requirements report approximately 114 um pad pitch",
+                req.pad_pitch_mm is not None
+                and abs(req.pad_pitch_mm - 0.114) < 1e-6,
+                f"got {req.pad_pitch_mm}",
+            )
+            matches = compatible_packages(req, family="QFN")
+            tc.check(
+                "IHP requirements recommend QFN-32 from the package catalogue",
+                bool(matches) and matches[0].name == "QFN-32",
+                f"got {[package.name for package in matches[:3]]}",
+            )
+
     # ── one-shot extraction ──────────────────────────────────────────────────
     def _extract():
         box["proxy"] = chip_proxy.extract_chip_proxy(_GDS, _LYP, _MAP, _XML)
@@ -155,6 +223,7 @@ def run():
     tc.check("extract_chip_proxy: thickness matches get_die_thickness_mm",
               abs(proxy["thickness_mm"] - thickness_mm) < 1e-9)
     tc.check("extract_chip_proxy: pads present", len(proxy.get("pads", [])) > 0)
+    tc.check("extract_chip_proxy: requirements present", "requirements" in proxy)
     tc.check("extract_chip_proxy uses get_bond_pad_positions_mm (named-cell strategy)",
               len(proxy.get("pads", [])) == len(box.get("bond_pads", [])),
               f"extract_chip_proxy={len(proxy.get('pads', []))} "
