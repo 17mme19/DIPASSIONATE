@@ -37,6 +37,7 @@ This Python AddIn for [FreeCAD](https://www.freecad.org/downloads.php) provides 
 | **Layer Slider** | Prusa-Slicer-style vertical slider — step through GDS layers from bottom to top for a quick stack review |
 | **Leadframe Library** | Browse and import STEP package models from the MirrorSemi online CAD catalogue directly into the active GDS document |
 | **Move / Rotate Chip** | Modeless dialog to translate and rotate all GDS chip objects as a group using arrow buttons or keyboard shortcuts |
+| **Select Package** | Combine GDS-detected die footprint/pad data with editable chip information and PCB/assembly constraints, then rank compatible library packages |
 | **Set Contact Points on Face** | Grid-based interactive tool: Ctrl+click faces → generate UV grid → click grid points → confirm to create contact point markers |
 | **Contact Point Browser** | Dock panel listing all contact points grouped by type (die-side / housing / PCB), with 3-D highlight on hover |
 | **Wire Bond** | Interactive 3-D wire bonding session — click a die-pad contact point, then a housing contact point; a solid swept-pipe bond wire is created |
@@ -76,15 +77,16 @@ This Python AddIn for [FreeCAD](https://www.freecad.org/downloads.php) provides 
 | Step | Tool | Details |
 |------|------|---------|
 | **1** | **Load GDSII** | Select `.gds` + `.lyp` (+ optional `.map` + `.xml`), choose layers, optionally enable Auto PIN Detection |
-| **2** | **Leadframe Library** or **Advanced → Leadframe Configurator** | Import STEP package or generate parametric QFN/QFP/BGA leadframe |
-| **3** | **Advanced → Center Leadframe** | Align die-attach paddle to GDS bounding box |
-| **4** | **Move / Rotate Chip** | Fine-tune chip position and orientation using arrow buttons or keyboard shortcuts |
-| **5** | **Advanced → Layer on Leadframe** *(optional)* | Stack GDS layers directly onto the leadframe |
-| **6** | **Advanced → Housing Configurator** *(optional)* | Generate transparent mold compound body |
-| **7** | **Set Contact Points on Face** | Place contact point markers on leadframe/housing leads (die-side markers auto-placed if Auto PIN Detection was used in step 1) |
-| **8** | **Wire Bond** | Click die pad → click housing lead → 3-D solid bond wire created; repeat per bond |
-| **9** | **Wire Bump Configurator** | Select bump shape, adjust parameters, pick connections from netlist, place bumps |
-| **10** | **Session ▾ → Save** | Save the design as a native FreeCAD document (`.FCStd`) |
+| **2** | **Select Package** | Review detected die dimensions and bond-pad count, add chip details, enter maximum package dimensions, pitch, temperature, thermal/electrical, PCB-layer, HDI, and assembly constraints; choose a ranked library recommendation or preferred family |
+| **3** | **Leadframe Library** or the package configurator follow-up | Import STEP package or generate the selected parametric QFN/QFP/BGA leadframe |
+| **4** | **Advanced → Center Leadframe** | Align die-attach paddle to GDS bounding box |
+| **5** | **Move / Rotate Chip** | Fine-tune chip position and orientation using arrow buttons or keyboard shortcuts |
+| **6** | **Advanced → Layer on Leadframe** *(optional)* | Stack GDS layers directly onto the leadframe |
+| **7** | **Advanced → Housing Configurator** *(optional)* | Generate transparent mold compound body |
+| **8** | **Set Contact Points on Face** | Place contact point markers on leadframe/housing leads (die-side markers auto-placed if Auto PIN Detection was used in step 1) |
+| **9** | **Wire Bond** | Click die pad → click housing lead → 3-D solid bond wire created; repeat per bond |
+| **10** | **Wire Bump Configurator** | Select bump shape, adjust parameters, pick connections from netlist, place bumps |
+| **11** | **Session ▾ → Save** | Save the design as a native FreeCAD document (`.FCStd`) |
 
 ---
 

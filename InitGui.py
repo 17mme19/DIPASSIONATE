@@ -21,6 +21,7 @@ try:
     from ui import LODManager as _LODManager  # noqa: F401  (side-effect: registers WorkbenchState provider)
     from gds import ShowDetailLayerPanelCommand
     from leadframe import LeadframeCommand
+    from leadframe import PackageConfiguratorCommand
     from leadframe import LeadframeLibraryCommand
     from leadframe import PinNumberingCommand
     from housing import HousingCommand
@@ -181,6 +182,7 @@ class MyWorkbench(FreeCADGui.Workbench):
             self.appendToolbar(
                 "Package Assembly",
                 [
+                    "PackageConfiguratorCommand",
                     "ChipTransformCommand",
                     "LeadframeLibraryCommand",
                     "SetContactPointsOnFaceCommand",
