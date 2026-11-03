@@ -21,6 +21,7 @@ try:
     from ui import LODManager as _LODManager  # noqa: F401  (side-effect: registers WorkbenchState provider)
     from gds import ShowDetailLayerPanelCommand
     from leadframe import LeadframeCommand
+    from leadframe import PackageConfiguratorCommand
     from leadframe import LeadframeLibraryCommand
     from leadframe import PinNumberingCommand
     from housing import HousingCommand
@@ -89,7 +90,7 @@ class AdvancedMenuCommand:
         }
 
     def Activated(self):
-        from compat import QtWidgets, QtGui
+        from compat import QtWidgets, QtGui, exec_menu
         import FreeCADGui
         from Get_Path import get_icon
 
@@ -103,7 +104,7 @@ class AdvancedMenuCommand:
                 act = menu.addAction(label)
             actions.append((act, cmd_name))
 
-        chosen = menu.exec_(QtGui.QCursor.pos())
+        chosen = exec_menu(menu, QtGui.QCursor.pos())
         for act, cmd_name in actions:
             if chosen == act:
                 FreeCADGui.runCommand(cmd_name)
@@ -181,6 +182,7 @@ class MyWorkbench(FreeCADGui.Workbench):
             self.appendToolbar(
                 "Package Assembly",
                 [
+                    "PackageConfiguratorCommand",
                     "ChipTransformCommand",
                     "LeadframeLibraryCommand",
                     "SetContactPointsOnFaceCommand",
@@ -488,5 +490,13 @@ class MyWorkbench(FreeCADGui.Workbench):
         return "Gui::PythonWorkbench"
 
 
-FreeCADGui.addWorkbench(MyWorkbench())
+try:
+    _registered_workbenches = FreeCADGui.listWorkbenches()
+except AttributeError:
+    _registered_workbenches = {}
+
+if "MyWorkbench" not in _registered_workbenches:
+    FreeCADGui.addWorkbench(MyWorkbench())
+else:
+    FreeCAD.Console.PrintMessage("GDSII Workbench already registered\n")
 FreeCAD.Console.PrintMessage("GDSII Workbench registration attempted\n")

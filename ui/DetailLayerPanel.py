@@ -57,7 +57,7 @@ import FreeCAD
 import FreeCADGui
 import Part
 from FreeCAD import Base
-from compat import QtWidgets, QtCore, QtGui
+from compat import QtWidgets, QtCore, QtGui, exec_menu
 from core.via_clustering import cluster_boxes, DEFAULT_CLUSTER_GAP_MM
 
 try:
@@ -538,19 +538,19 @@ class _LayerRow(QtWidgets.QWidget):
         if self._lod_state == "solid":
             act_preview = menu.addAction("Load Preview  (2D, fast)")
             act_volume  = menu.addAction("Load Volume   (3D, slow)")
-            chosen = menu.exec_(event.globalPos())
+            chosen = exec_menu(menu, event.globalPos())
             if chosen == act_preview:
                 self.preview_requested.emit()
             elif chosen == act_volume:
                 self.load_requested.emit()
         elif self._lod_state == "preview":
             act_volume = menu.addAction("Load Volume  (upgrade to 3D)")
-            chosen = menu.exec_(event.globalPos())
+            chosen = exec_menu(menu, event.globalPos())
             if chosen == act_volume:
                 self.load_requested.emit()
         elif self._lod_state == "detail":
             act_reset = menu.addAction("Reset to Placeholder")
-            chosen = menu.exec_(event.globalPos())
+            chosen = exec_menu(menu, event.globalPos())
             # reset is handled via simplify_toggled (BBox)
             if chosen == act_reset:
                 self.simplify_toggled.emit(True)
