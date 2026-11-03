@@ -190,7 +190,7 @@ def recommend_packages(chip: ChipInfo, requirements: PackageRequirements,
         if requirements.rework:
             requested = _REWORK_RANK.get(requirements.rework, 0)
             actual = _REWORK_RANK.get(pkg.rework, 0)
-            if actual <= requested:
+            if actual >= requested:
                 score += 8
                 reasons.append(f"{pkg.rework.lower()} rework")
             else:
@@ -199,7 +199,7 @@ def recommend_packages(chip: ChipInfo, requirements: PackageRequirements,
         if requirements.cost:
             requested = _COST_RANK.get(requirements.cost, 0)
             actual = _COST_RANK.get(pkg.cost, 0)
-            if actual <= requested:
+            if actual >= requested:
                 score += 8
                 reasons.append(f"{pkg.cost.lower()} cost")
             else:
