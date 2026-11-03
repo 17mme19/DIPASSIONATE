@@ -24,7 +24,11 @@ class PackageConfiguratorCommand:
         leadframe.apply_package(config["package"])
         if leadframe.exec_() == 1:
             from leadframe.LeadframeCommand import create_leadframe
-            create_leadframe(leadframe.get_config(),
+            leadframe_config = leadframe.get_config()
+            leadframe_config.update({
+                "mounting": config["requirements"].mounting,
+            })
+            create_leadframe(leadframe_config,
                              doc=FreeCAD.activeDocument())
 
 

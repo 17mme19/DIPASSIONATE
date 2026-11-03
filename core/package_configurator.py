@@ -26,16 +26,13 @@ class PackageRequirements:
     max_length_mm: Optional[float] = None
     max_width_mm: Optional[float] = None
     max_height_mm: Optional[float] = None
-    operating_temp_min_c: Optional[float] = None
-    operating_temp_max_c: Optional[float] = None
-    thermal_requirement: str = ""
-    electrical_requirement: str = ""
     min_supported_pitch_mm: Optional[float] = None
-    pcb_layers: Optional[int] = None
-    hdi_capable: bool = False
-    assembly_capability: str = ""
-    other_constraints: str = ""
+    thermal_performance: str = ""
+    electrical_performance: str = ""
+    rework: str = ""
+    cost: str = ""
     preferred_family: str = ""
+    mounting: str = ""
 
 
 @dataclass
@@ -51,6 +48,17 @@ def _number(value):
     except (TypeError, ValueError):
         return None
     return value if value > 0 else None
+
+
+_THERMAL_RANK = {
+    "Low-Moderate": 1,
+    "Moderate": 2,
+    "Good": 3,
+    "Excellent": 4,
+}
+_ELECTRICAL_RANK = {"Low": 1, "Good": 2, "Excellent": 3}
+_REWORK_RANK = {"Easy": 4, "Medium": 3, "Hard": 2, "Very Hard": 1}
+_COST_RANK = {"Low": 3, "Medium": 2, "High": 1}
 
 
 def extract_chip_info(doc) -> ChipInfo:
@@ -137,6 +145,8 @@ def recommend_packages(chip: ChipInfo, requirements: PackageRequirements,
         if (requirements.min_supported_pitch_mm is not None
                 and pitch < requirements.min_supported_pitch_mm):
             continue
+        if requirements.mounting and pkg.mounting != requirements.mounting:
+            continue
 
         score = 100.0
         score -= max(0.0, pkg.body_length_mm - chip.length_mm) * 2
@@ -152,6 +162,51 @@ def recommend_packages(chip: ChipInfo, requirements: PackageRequirements,
             reasons.append("meets PCB pitch capability")
         if chip.length_mm and chip.width_mm:
             reasons.append("fits detected die footprint")
+        if requirements.thermal_performance:
+            required = _THERMAL_RANK.get(requirements.thermal_performance, 0)
+            actual = _THERMAL_RANK.get(pkg.thermal_performance, 0)
+            if actual >= required:
+                score += 10
+                reasons.append(f"{pkg.thermal_performance.lower()} thermal capability")
+            else:
+                score -= (required - actual) * 10
+                reasons.append(
+                    f"below {requirements.thermal_performance.lower()} thermal target"
+                )
+        if requirements.electrical_performance:
+            required = _ELECTRICAL_RANK.get(requirements.electrical_performance, 0)
+            actual = _ELECTRICAL_RANK.get(pkg.electrical_performance, 0)
+            if actual >= required:
+                score += 10
+                reasons.append(
+                    f"{pkg.electrical_performance.lower()} electrical capability"
+                )
+            else:
+                score -= (required - actual) * 10
+                reasons.append(
+                    f"below {requirements.electrical_performance.lower()} "
+                    "electrical target"
+                )
+        if requirements.rework:
+            requested = _REWORK_RANK.get(requirements.rework, 0)
+            actual = _REWORK_RANK.get(pkg.rework, 0)
+            if actual <= requested:
+                score += 8
+                reasons.append(f"{pkg.rework.lower()} rework")
+            else:
+                score -= (actual - requested) * 8
+                reasons.append(f"{pkg.rework.lower()} rework")
+        if requirements.cost:
+            requested = _COST_RANK.get(requirements.cost, 0)
+            actual = _COST_RANK.get(pkg.cost, 0)
+            if actual <= requested:
+                score += 8
+                reasons.append(f"{pkg.cost.lower()} cost")
+            else:
+                score -= (actual - requested) * 8
+                reasons.append(f"{pkg.cost.lower()} cost")
+        if requirements.mounting:
+            score += 10
+            reasons.append(f"{pkg.mounting} mounting")
         result.append(PackageRecommendation(pkg, score, reasons))
     return sorted(result, key=lambda item: (-item.score, item.package.name))
-
